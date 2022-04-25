@@ -21,4 +21,9 @@ class AppState {
       pageNumber: pageNumber ?? this.pageNumber,
     );
   }
+
+  @override
+  String toString() {
+    return 'AppState{movies: $movies, isLoading: $isLoading, pageNumber: $pageNumber}';
+  }
 }
