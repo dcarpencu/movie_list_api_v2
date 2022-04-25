@@ -17,13 +17,11 @@ void main() {
 
   final Store<AppState> store = Store<AppState>(
     reducer,
-    initialState: AppState(),
+    initialState: const AppState(),
     middleware: <Middleware<AppState>>[
       EpicMiddleware<AppState>(epic.getEpics()),
     ],
-  );
-
-  store.dispatch(GetMovies(1));
+  )..dispatch(GetMovies());
 
   runApp(MoviesApp(store: store));
 }

@@ -16,16 +16,18 @@ Reducer<AppState> _reducer = combineReducers<AppState>(<Reducer<AppState>>[
   TypedReducer<AppState, GetMoviesError>(_getMoviesError),
 ]);
 
-AppState _getMovies(AppState state, GetMoviesSuccessful action) {
+AppState _getMovies(AppState state, GetMovies action) {
   return state.copyWith(isLoading: true);
 }
 
 AppState _getMoviesSuccessful(AppState state, GetMoviesSuccessful action) {
   return state.copyWith(
-      isLoading: false,
-      movies: <Movie>[...state.movies, ...action.movies]);
+    isLoading: false,
+    pageNumber: state.pageNumber + 1,
+    movies: <Movie>[...state.movies, ...action.movies],
+  );
 }
 
-AppState _getMoviesError(AppState state, GetMoviesSuccessful action) {
+AppState _getMoviesError(AppState state, GetMoviesError action) {
   return state.copyWith(isLoading: false);
 }

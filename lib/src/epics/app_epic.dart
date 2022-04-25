@@ -17,7 +17,7 @@ class AppEpic {
 
   Stream<dynamic> _getMovies(Stream<GetMovies> actions, EpicStore<AppState> store) {
     return actions
-        .asyncMap((GetMovies action) => _movieApi.getMovies(action.page))
+        .asyncMap((GetMovies action) => _movieApi.getMovies(store.state.pageNumber))
         .map<dynamic>(GetMoviesSuccessful.new)
         .onErrorReturnWith((Object error, StackTrace stackTrace) => GetMoviesError(error));
   }

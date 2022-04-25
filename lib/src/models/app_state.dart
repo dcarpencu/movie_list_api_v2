@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
-import 'package:movie_list_api_v2/src/models/movie.dart';
 import 'package:meta/meta.dart';
+import 'package:movie_list_api_v2/src/models/movie.dart';
 
 @immutable
 class AppState {
-  AppState({this.movies = const <Movie>[], this.isLoading = true, this.pageNumber = 1});
+  const AppState({
+    this.movies = const <Movie>[],
+    this.isLoading = true,
+    this.pageNumber = 1,
+  });
 
   final List<Movie> movies;
   final bool isLoading;
@@ -24,6 +28,6 @@ class AppState {
 
   @override
   String toString() {
-    return 'AppState{movies: $movies, isLoading: $isLoading, pageNumber: $pageNumber}';
+    return 'AppState{isLoading: $isLoading, \npageNumber: $pageNumber, \nmovies: $movies}';
   }
 }
