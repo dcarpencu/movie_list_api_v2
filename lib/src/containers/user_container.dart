@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:movie_list_api_v2/src/models/app_state.dart';
-import 'package:movie_list_api_v2/src/models/app_user.dart';
-import 'package:movie_list_api_v2/src/models/movie.dart';
+import 'package:movie_list_api_v2/src/models/index.dart';
 import 'package:redux/redux.dart' show Store;
 
 class UserContainer extends StatelessWidget {

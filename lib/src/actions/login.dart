@@ -1,8 +1,4 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:movie_list_api_v2/src/actions/index.dart';
-import 'package:movie_list_api_v2/src/models/app_user.dart';
-
-part 'login.freezed.dart';
+part of 'index.dart';
 
 @freezed
 class Login with _$Login implements AppAction {

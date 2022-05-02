@@ -1,8 +1,4 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:movie_list_api_v2/src/actions/index.dart';
-import 'package:movie_list_api_v2/src/models/app_user.dart';
-
-part 'create_user.freezed.dart';
+part of 'index.dart';
 
 @freezed
 class CreateUser with _$CreateUser implements AppAction {

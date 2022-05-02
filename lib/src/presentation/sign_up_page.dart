@@ -1,28 +1,34 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:movie_list_api_v2/src/actions/index.dart';
 import 'package:movie_list_api_v2/src/models/index.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  final TextEditingController _username = TextEditingController();
   final FocusNode _passwordNode = FocusNode();
+  final FocusNode _usernameNode = FocusNode();
 
   void _onNext(BuildContext context) {
     if (!Form.of(context)!.validate()) {
       return;
     }
     StoreProvider.of<AppState>(context).dispatch(
-      Login(email: _email.text, password: _password.text, onResult: _onResult),
+      CreateUser(
+        email: _email.text,
+        password: _password.text,
+        username: _username.text,
+        onResult: _onResult,
+      ),
     );
   }
 
@@ -35,12 +41,11 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$error')));
       }
-
-      if (kDebugMode) {
-        print(action.error);
-      }
+    } else if (action is CreateUserSuccessful) {
+        Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
     }
-  }
+      //
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +70,27 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
+                            return 'Please enter a email.';
                           } else if (!value.contains('@')) {
-                            return 'Please enter a valid email address';
+                            return 'Please enter a valid email address.';
+                          }
+                          return null;
+                        },
+                        onFieldSubmitted: (String value) {
+                          FocusScope.of(context).requestFocus(_usernameNode);
+                        },
+                      ),
+                      TextFormField(
+                        controller: _username,
+                        focusNode: _usernameNode,
+                        keyboardType: TextInputType.name,
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                          hintText: 'username',
+                        ),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a username.';
                           }
                           return null;
                         },
@@ -86,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
+                            return 'Please enter a password.';
                           } else if (value.length < 6) {
                             return 'Please enter a password longer than 6 characters.';
                           }
@@ -99,19 +122,19 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 16),
                       TextButton(
                         onPressed: () => _onNext(context),
-                        child: const Text('Login'),
+                        child: const Text('Sign Up'),
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/signUp');
+                          Navigator.pop(context);
                         },
                         child: const Text(
-                          'Sign Up',
+                          'Login',
                           style: TextStyle(
                             color: Colors.black,
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:movie_list_api_v2/src/actions/getmovies.dart';
 import 'package:movie_list_api_v2/src/actions/index.dart';
 import 'package:movie_list_api_v2/src/containers/home_page_container.dart';
 import 'package:movie_list_api_v2/src/containers/movies_container.dart';
-import 'package:movie_list_api_v2/src/models/app_state.dart';
-import 'package:movie_list_api_v2/src/models/movie.dart';
-import 'package:redux/redux.dart' show Store;
+import 'package:movie_list_api_v2/src/containers/user_container.dart';
+import 'package:movie_list_api_v2/src/models/index.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -51,24 +49,40 @@ class _HomePageState extends State<HomePage> {
           body: MoviesContainer(
             builder: (BuildContext context, List<Movie> movies) {
               if (state.isLoading && movies.isEmpty) {
-                return const Center(child: CircularProgressIndicator());
-              } else {
-                return ListView.builder(
-                  itemCount: movies.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final Movie movie = movies[index];
-
-                    return Column(
-                      children: <Widget>[
-                        Image.network(movie.poster),
-                        Text('${movie.year}'),
-                        Text(movie.genres.join(', ')),
-                        Text('${movie.rating}'),
-                      ],
-                    );
-                  },
-                );
+                return const Center(
+                    child: CircularProgressIndicator(),);
               }
+                return UserContainer(
+                  builder: (BuildContext context, AppUser? user) {
+                  return ListView.builder(
+                    itemCount: movies.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final Movie movie = movies[index];
+                      final bool isFavorite = user!.favoriteMovies.contains(movie.id);
+
+                      return Column(
+                        children: <Widget>[
+                          Stack(
+                            children: <Widget>[
+                              Image.network(movie.poster),
+                              IconButton(
+                                color: Colors.red,
+                                icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
+                                onPressed: () {
+                                  StoreProvider.of<AppState>(context)
+                                      .dispatch(UpdateFavorite(movie.id, add: !isFavorite));
+                                },
+                            )
+                          ],
+                          ),
+                          Text('${movie.year}'),
+                          Text(movie.genres.join(', ')),
+                          Text('${movie.rating}'),
+                        ],
+                      );
+                    },
+                  );
+              },);
             },
           ),
         );
