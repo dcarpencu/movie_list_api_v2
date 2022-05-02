@@ -1,32 +1,15 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:movie_list_api_v2/src/actions/index.dart';
 import 'package:movie_list_api_v2/src/models/movie.dart';
 
-class GetMovies {
-  GetMovies();
+part 'getmovies.freezed.dart';
 
-  @override
-  String toString() {
-    return 'GetMovies()';
-  }
-}
+@freezed
+class GetMovies with _$GetMovies implements AppAction {
+  const factory GetMovies(ActionResult onResult) = GetMoviesStart;
 
-class GetMoviesSuccessful {
-  GetMoviesSuccessful(this.movies);
+  const factory GetMovies.successful(List<Movie> movies) = GetMoviesSuccessful;
 
-  final List<Movie> movies;
-
-  @override
-  String toString() {
-    return 'GetMoviesSuccessful{movies: $movies}';
-  }
-}
-
-class GetMoviesError {
-  GetMoviesError(this.error);
-
-  final Object error;
-
-  @override
-  String toString() {
-    return 'GetMoviesError{error: $error}';
-  }
+  @Implements<ErrorAction>()
+  const factory GetMovies.error(Object error, StackTrace stackTrace) = GetMoviesError;
 }
